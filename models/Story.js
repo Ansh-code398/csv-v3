@@ -17,10 +17,6 @@ const StorySchema = new mongoose.Schema({
         type: Number,
         required: true
       },
-      coverPhoto: {
-        type: String,
-        required: true
-      },
       content: {
         type: String,
         required: true
