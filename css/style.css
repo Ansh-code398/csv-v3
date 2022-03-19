@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 * {
   font-family: 'Open Sans', sans-serif;
@@ -181,4 +184,38 @@ li {
 
 .confirmation-box.show {
   display: block;
+}
+
+.md-preview a{
+  color: #db6262;
+  text-decoration: underline;
+}
+
+.md-preview code{
+  background: #490f49;
+}
+.md-preview h1{
+  font-size: 3rem;
+}
+.md-preview h2{
+  font-size: 2.5rem;
+}
+.md-preview h3{
+  font-size: 2rem;
+}
+.md-preview h4{
+  font-size: 1.5rem;
+}
+.md-preview h5{
+  font-size: 1.25rem;
+}
+.md-preview h6{
+  font-size: 1rem;
+}
+.md-preview p{
+  font-size: 1rem;
+}
+.md-preview blockquote{
+  font-size: 1rem;
+  font-style: italic;
 }
