@@ -7,8 +7,9 @@ export default async function handler(req, res) {
   await dbConnect()
 
   await NextCors(req, res, {
-    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: '*',
+    optionsSuccessStatus: 200
   })
 
   switch (method) {
