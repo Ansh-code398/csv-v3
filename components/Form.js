@@ -34,8 +34,10 @@ const Form = () => {
             story
         }).then(res => {
             console.log(res);
+            setLoading(false)
         }).catch(err => {
             console.log(err);
+            setLoading(false)
         })    
     }
 

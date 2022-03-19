@@ -1,31 +1,15 @@
 import dbConnect from '../../../lib/dbConnect'
 import Story from '../../../models/Story';
-
-// Initializing the cors middleware
-const cors = Cors({
-  origin: '*',
-  methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE']
-})
-
-// Helper method to wait for a middleware to execute before continuing
-// And to throw an error when an error happens in a middleware
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result)
-      }
-
-      return resolve(result)
-    })
-  })
-}
+import NextCors from 'nextjs-cors';
 
 export default async function handler(req, res) {
-  await runMiddleware(req, res, cors)
   const { method } = req
-
   await dbConnect()
+
+  await NextCors(req, res, {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  })
 
   switch (method) {
     case 'GET':
@@ -42,14 +26,6 @@ export default async function handler(req, res) {
           req.body
         ) /* create a new model in the database */
         res.status(201).json({ success: true, data: pet })
-      } catch (error) {
-        res.status(400).json({ success: false })
-      }
-      break
-    case 'DELETE':
-      try {
-        const pet = await Story.findOneAndDelete(req.body.id) /* delete a model in the database */
-        res.status(200).json({ success: true, data: pet })
       } catch (error) {
         res.status(400).json({ success: false })
       }
