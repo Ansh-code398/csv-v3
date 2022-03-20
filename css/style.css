@@ -806,3 +806,11 @@ body{
   top: 50%;
   transform: translate(-50%, -50%);
 }
+
+a  {
+	text-decoration: underline;
+}
+
+li{
+	list-style: circle;
+}
