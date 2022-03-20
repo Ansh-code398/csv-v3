@@ -1,6 +1,6 @@
 import '../css/style.css'
 import Head from 'next/head'
-import Link from 'next/link'
+import Navbar from '../components/Navbar'
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -9,22 +9,7 @@ function MyApp({ Component, pageProps }) {
         <title>CSV V3</title>
       </Head>
 
-      <div className="top-bar">
-        <div className="nav">
-          <Link href="/">
-            <a>Home</a>
-          </Link>
-          <Link href="/new">
-            <a>Add Story</a>
-          </Link>
-        </div>
-
-        <img
-          id="title"
-          src="/favicon.ico"
-          alt="logo"
-        ></img>
-      </div>
+      <Navbar/>
       <div className="grid wrapper">
         <Component {...pageProps} />
       </div>

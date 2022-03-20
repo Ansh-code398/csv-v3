@@ -19,7 +19,7 @@ const Form = () => {
         const bgLink = coverPhoto.current.value.split(',')
         const story = {
             name: name.current.value,
-            description: description,
+            description: content.current.value,
             slides: slides.map((slide, index) => {
                 return {
                     number: index + 1,
