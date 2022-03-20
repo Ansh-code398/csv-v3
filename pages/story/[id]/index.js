@@ -1,17 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import Form from '../components/Form'
-import showdown from 'showdown';
 import { Button } from '@mui/material';
 import axios from 'axios';
-const NewPet = () => {
-  //Markdown to Json converter
-  const prv_btn = useRef();
+import React, { useEffect, useRef } from 'react'
+import showdown from 'showdown';
+
+const Index = ({story}) => {
+const prv_btn = useRef();
   const nxt_btn = useRef();
-  const [editor, setEditor] = useState("---\n{{time:100}}\n{{bg_typ:img}}\n{{bg_link:https://picsum.photos/1000/1000}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 1\n## Scenes\n---\n{{time:100}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 2\n---\n{{time:100}}\n{{bg_typ:ytv}}\n{{bg_link:https://www.youtube.com/embed/jV3xxOoWe-4}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 3\n\t\t\t");
-
-  const [n, setN] = useState("Billinger.md");
-
-  const name = useRef()
 
   function removeItemAll(arr, value) {
     var i = 0;
@@ -32,7 +26,7 @@ const NewPet = () => {
 
     var index = markdown_scenes.indexOf("");
     markdown_scenes = removeItemAll(markdown_scenes, "");
-    let scenes = [];
+   let  scenes = [];
     let markdown_scene_no = 0;
     for (markdown_scene_no in markdown_scenes) {
       let pattern = /\{\{.*?\}\}/gm;
@@ -98,7 +92,7 @@ const NewPet = () => {
   }
   function render_md_to_stage() {
     clear_stage();
-    let content = editor
+    let content = story.description
     let scences = markdown_to_json(content);
     JSON_to_stage(scences);
     //document.getElementById("player_container").innerHTML
@@ -109,7 +103,7 @@ const NewPet = () => {
   var current_scene = 1;
   var max_scene = 0;
 
-  function onPrvClick() {
+   function onPrvClick () {
     current_scene -= 1;
     location.href = "#box_no" + (current_scene);
     if (min_scene + 1 == current_scene) {
@@ -120,7 +114,7 @@ const NewPet = () => {
       nxt_btn.current.classList.remove("disabled");
     }
   };
-  function OnNxtClick() {
+  function OnNxtClick () {
     current_scene += 1;
     location.href = "#box_no" + (current_scene);
     if (max_scene == current_scene) {
@@ -135,50 +129,30 @@ const NewPet = () => {
   useEffect(() => {
     render_md_to_stage();
   }, [])
-
-  useEffect(() => {
-    render_md_to_stage();
-  }, [editor])
-
+  
   return (
-    <div className="contained align-text-center">
-      <div className="align-text-center mt-5 mb-3">
-        <label htmlFor="exampleFormControlInput1" className="align-text-center form-label" ref={name} required>Document Name</label>
-        <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Billinger.md" value={n} onChange={(e)=> {
-          setN(e.target.value)
-        }} />
-      </div>
-      <div className="editor d-flex">
-        <textarea placeholder="Enter markdown..." id="markdown_editor" value={editor} onChange={(e) => {
-          setEditor(e.target.value);
-        }} className="markdown_editor" oninput="render_md_to_stage();" defaultValue={"---\n{{time:100}}\n{{bg_typ:img}}\n{{bg_link:https://picsum.photos/1000/1000}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 1\n## Scenes\n---\n{{time:100}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 2\n---\n{{time:100}}\n{{bg_typ:ytv}}\n{{bg_link:https://www.youtube.com/embed/jV3xxOoWe-4}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 3\n\t\t\t"} />
-        <div id="previewer" frameBorder={0}>
-          <div id="player_container" className="player_container">
+    <div>
+        <div id="previewer" className='w-screen mx-0' style={{width: '100%'}} frameBorder={0}>
+          <div id="player_container" className="player_container w-full">
           </div>
         </div>
-      </div>
-      <div className="btn-group" role="group" aria-label="Basic example" style={{ display: 'flex', justifyContent: 'center' }}>
+        <div className="btn-group" role="group" aria-label="Basic example" style={{ display: 'flex', justifyContent: 'center' }}>
         <button id="prv_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }} onClick={onPrvClick} ref={prv_btn}><i className="fa fa-step-backward text-black" aria-hidden="true" /></button>
-        <button id="pause_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }} />
-        <button id="nxt_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }} onClick={OnNxtClick} ref={nxt_btn}><i className="fa fa-step-forward text-black" aria-hidden="true" /></button>
+        <button id="pause_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }}></button>
+        <button id="nxt_btn" type="button" className="btn btn-secondary text-black" style={{ maxWidth: '50px' }} onClick={OnNxtClick} ref={nxt_btn}><i className="fa fa-step-forward" aria-hidden="true"  /></button>
       </div>
-      <div className='w-full flex justify-center items-center mx-0'>
-        <Button varient="success" disabled={n.split(" ").join("") === ""} onClick={() => {
-          axios.post('https://csv-v3-api.vercel.app/api/story/', {
-            story: {
-              name: n,
-              description: editor
-            }
-          }).then(res => {
-            window.location.href = `/story/${res.data._id}`
-          })
-        }}>
-          Submit
-        </Button>
-        </div>
-
     </div>
   )
 }
 
-export default NewPet
+export default Index;
+
+export async function getServerSideProps(ctx) {
+    const data = await (await axios.get(`https://csv-v3-api.vercel.app/api/story/${ctx.query.id}`)).data;
+    return {
+        props: {
+        // props to pass to the page component
+        story: data.story,
+        },
+    }
+    }
