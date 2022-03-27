@@ -11,11 +11,10 @@ function MyApp({ Component, pageProps }) {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" crossorigin="anonymous"></link>
       </Head>
 
-      <Navbar />
+      {/* <Navbar /> */}
         <Component {...pageProps} />
       {/* <div className="grid wrapper">
       </div> */}
-      <Script src="https://cdn.jsdelivr.net/npm/showdown@2.0.0/dist/showdown.min.js"></Script>
       <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></Script>
     </>
   )

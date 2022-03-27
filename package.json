@@ -29,6 +29,7 @@
     "react-markdown-previewer": "^1.0.3",
     "remark-gfm": "^3.0.1",
     "showdown": "^2.0.3",
+    "styled-components": "^5.3.3",
     "swr": "^1.0.1"
   },
   "devDependencies": {

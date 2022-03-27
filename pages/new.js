@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import Form from '../components/Form'
+// import Form from '../components/Form'
 import showdown from 'showdown';
 import { Button } from '@mui/material';
 import axios from 'axios';
+import Navbar from '../components/Navbar'
+
 const NewPet = () => {
   //Markdown to Json converter
   const prv_btn = useRef();
@@ -74,7 +76,8 @@ const NewPet = () => {
       var v_link = scence["bg_link"];
       //document.getElementById("player_container").style.display = "none"
       console.log(v_link)
-      document.getElementById('box_no' + scence["no"]).innerHTML += '<iframe id="iframe" height="100%" allowfullscreen width="100%" frameborder="0" src="' + v_link + '?autoplay=1&loop=1&mute=1&controls=0&disablekb&rel=0"></iframe>';
+      // document.getElementById('box_no' + scence["no"]).innerHTML += '<iframe id="iframe" height="100%" allowfullscreen width="100%" frameborder="0" src="' + v_link + '?autoplay=1&loop=1&mute=1&controls=0&disablekb&rel=0"></iframe>';
+      document.getElementById('box_no' + scence["no"]).innerHTML += `<video width="560" height="315" class="absolute top-0 left-0 w-full h-full" src="${v_link}" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></video>`;
       console.log(v_link);//document.getElementById("iframe").setAttribute("src",v_link+'?autoplay=1&loop=1&mute=1&controls=0&disablekb&rel=0');
     }
   }
@@ -141,6 +144,8 @@ const NewPet = () => {
   }, [editor])
 
   return (
+    <>
+    <Navbar/>
     <div className="contained align-text-center">
       <div className="align-text-center mt-5 mb-3">
         <label htmlFor="exampleFormControlInput1" className="align-text-center form-label" ref={name} required>Document Name</label>
@@ -161,6 +166,7 @@ const NewPet = () => {
         <button id="prv_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }} onClick={onPrvClick} ref={prv_btn}><i className="fa fa-step-backward text-black" aria-hidden="true" /></button>
         <button id="pause_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }} />
         <button id="nxt_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }} onClick={OnNxtClick} ref={nxt_btn}><i className="fa fa-step-forward text-black" aria-hidden="true" /></button>
+        
       </div>
       <div className='w-full flex justify-center items-center mx-0'>
         <Button varient="success" disabled={n.split(" ").join("") === ""} onClick={() => {
@@ -178,6 +184,7 @@ const NewPet = () => {
         </div>
 
     </div>
+    </>
   )
 }
 

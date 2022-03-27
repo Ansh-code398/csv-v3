@@ -2,6 +2,7 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useRef } from 'react'
 import showdown from 'showdown';
+import Navbar from '../../../components/Navbar'
 
 const Index = ({story}) => {
 const prv_btn = useRef();
@@ -70,6 +71,7 @@ const prv_btn = useRef();
       console.log(v_link)
       document.getElementById('box_no' + scence["no"]).innerHTML += '<iframe id="iframe" height="100%" allowfullscreen width="100%" frameborder="0" src="' + v_link + '?autoplay=1&loop=1&mute=1&controls=0&disablekb&rel=0"></iframe>';
       console.log(v_link);//document.getElementById("iframe").setAttribute("src",v_link+'?autoplay=1&loop=1&mute=1&controls=0&disablekb&rel=0');
+      
     }
   }
 
@@ -106,7 +108,7 @@ const prv_btn = useRef();
    function onPrvClick () {
     current_scene -= 1;
     location.href = "#box_no" + (current_scene);
-    if (min_scene + 1 == current_scene) {
+    if ((min_scene + 1) === current_scene) {
       prv_btn.current.classList.add("disabled");
       nxt_btn.current.classList.remove("disabled");
     }
@@ -132,6 +134,7 @@ const prv_btn = useRef();
   
   return (
     <div>
+      <Navbar/>
         <div id="previewer" className='w-screen mx-0' style={{width: '100%'}} frameBorder={0}>
           <div id="player_container" className="player_container w-full">
           </div>

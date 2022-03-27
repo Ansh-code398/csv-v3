@@ -45,7 +45,7 @@
  .video-app {
 	 display: flex;
 	 flex-direction: column;
-	 max-width: 1400px;
+	 /* max-width: 1400px; */
 	 height: 100vh;
 	 margin: 0 auto;
 	 overflow: hidden;
@@ -391,6 +391,8 @@
  .videos {
 	 display: flex;
 	 flex-wrap: wrap;
+	 margin: 0;
+	 min-width: 100%;
 	 min-height: 100vh;
 }
  .video img {
@@ -749,13 +751,7 @@ blockquote{
     font-family: 'Courier New', Courier, monospace;
 
 }
-
-body{
-    padding: 8px;
-}
-
 #previewer{
-    background: #fff;
     border: none;
     width: 50%;
     height: 95vh;
@@ -767,13 +763,11 @@ body{
   overflow: hidden;
   height: 100%;
   width: 100%;
-  background: #ff0000;
   position: relative;
 }
 .scence_box {
   height: 100%;
   width: 100%;
-  background: #110094;
 }
 .bg_img {
   background-size: cover;
