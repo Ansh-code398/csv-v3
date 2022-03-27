@@ -394,6 +394,7 @@
 	 margin: 0;
 	 min-width: 100%;
 	 min-height: 100vh;
+	 justify-content: center;
 }
  .video img {
 	 transition: 0.4s;
