@@ -4,6 +4,7 @@ import showdown from 'showdown';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import Navbar from '../components/Navbar'
+import { ReactMediaRecorder } from "react-media-recorder";
 
 const NewPet = () => {
   //Markdown to Json converter
@@ -12,6 +13,7 @@ const NewPet = () => {
   const [editor, setEditor] = useState("---\n{{time:100}}\n{{bg_typ:img}}\n{{bg_link:https://picsum.photos/1000/1000}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 1\n## Scenes\n---\n{{time:100}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 2\n---\n{{time:100}}\n{{bg_typ:ytv}}\n{{bg_link:https://www.youtube.com/embed/jV3xxOoWe-4}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 3\n\t\t\t");
 
   const [n, setN] = useState("Billinger.md");
+  const [paused, setPaused] = useState(false);
 
   const name = useRef()
 
@@ -145,45 +147,64 @@ const NewPet = () => {
 
   return (
     <>
-    <Navbar/>
-    <div className="contained align-text-center">
-      <div className="align-text-center mt-5 mb-3">
-        <label htmlFor="exampleFormControlInput1" className="align-text-center form-label" ref={name} required>Document Name</label>
-        <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Billinger.md" value={n} onChange={(e)=> {
-          setN(e.target.value)
-        }} />
-      </div>
-      <div className="editor d-flex">
-        <textarea placeholder="Enter markdown..." id="markdown_editor" value={editor} onChange={(e) => {
-          setEditor(e.target.value);
-        }} className="markdown_editor" oninput="render_md_to_stage();" defaultValue={"---\n{{time:100}}\n{{bg_typ:img}}\n{{bg_link:https://picsum.photos/1000/1000}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 1\n## Scenes\n---\n{{time:100}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 2\n---\n{{time:100}}\n{{bg_typ:ytv}}\n{{bg_link:https://www.youtube.com/embed/jV3xxOoWe-4}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 3\n\t\t\t"} />
-        <div id="previewer" frameBorder={0}>
-          <div id="player_container" className="player_container">
+      <Navbar />
+      <div className="contained align-text-center">
+        <div className="align-text-center mt-5 mb-3">
+          <label htmlFor="exampleFormControlInput1" className="align-text-center form-label" ref={name} required>Document Name</label>
+          <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Billinger.md" value={n} onChange={(e) => {
+            setN(e.target.value)
+          }} />
+        </div>
+        <div className="editor d-flex">
+          <textarea placeholder="Enter markdown..." id="markdown_editor" value={editor} onChange={(e) => {
+            setEditor(e.target.value);
+          }} className="markdown_editor" oninput="render_md_to_stage();" defaultValue={"---\n{{time:100}}\n{{bg_typ:img}}\n{{bg_link:https://picsum.photos/1000/1000}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 1\n## Scenes\n---\n{{time:100}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 2\n---\n{{time:100}}\n{{bg_typ:ytv}}\n{{bg_link:https://www.youtube.com/embed/jV3xxOoWe-4}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 3\n\t\t\t"} />
+          <div id="previewer" frameBorder={0}>
+            <div id="player_container" className="player_container">
+            </div>
           </div>
         </div>
-      </div>
-      <div className="btn-group" role="group" aria-label="Basic example" style={{ display: 'flex', justifyContent: 'center' }}>
-        <button id="prv_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }} onClick={onPrvClick} ref={prv_btn}><i className="fa fa-step-backward text-black" aria-hidden="true" /></button>
-        <button id="pause_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }} />
-        <button id="nxt_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }} onClick={OnNxtClick} ref={nxt_btn}><i className="fa fa-step-forward text-black" aria-hidden="true" /></button>
-        
-      </div>
-      <div className='w-full flex justify-center items-center mx-0'>
-        <Button varient="success" disabled={n.split(" ").join("") === ""} onClick={() => {
-          axios.post('https://csv-v3-api.vercel.app/api/story/', {
-            story: {
-              name: n,
-              description: editor
+        <div className="btn-group" role="group" aria-label="Basic example" style={{ display: 'flex', justifyContent: 'center' }}>
+          <button id="prv_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }} onClick={onPrvClick} ref={prv_btn}><i className="fa fa-step-backward text-black" aria-hidden="true" /></button>
+          <button id="nxt_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }} onClick={OnNxtClick} ref={nxt_btn}><i className="fa fa-step-forward text-black" aria-hidden="true" /></button>
+
+        </div>
+          <ReactMediaRecorder
+            screen
+            blobPropertyBag={
+              {
+                type: "video/mp4"
+              }
             }
-          }).then(res => {
-            window.location.href = `/story/${res.data._id}`
-          })
-        }}>
-          Submit
-        </Button>
+            render={({status, startRecording, resumeRecording, pauseRecording, stopRecording, mediaBlobUrl, muteAudio, unMuteAudio, isAudioMuted, clearBlobUrl}) => (
+              <div className='text-center my-2'>
+                {status === "idle" || status === "stopped" && <Button color='success' variant='outlined' onClick={startRecording}>Start Recording</Button>}
+                {status === "recording" && !paused ? <button className='btn btn-primary' onClick={() => {pauseRecording(); setPaused(true)}}>Pause Recording</button> :
+                <button className='btn btn-primary' onClick={()=> {resumeRecording(); setPaused(false)}}>Resume Recording</button>}
+                {status === "recording" && <button className='btn btn-primary' onClick={stopRecording}>Stop Recording</button>}
+                {status === "recording" && !isAudioMuted ? <button className='btn btn-primary' onClick={muteAudio}>Mute Audio</button> : 
+                <button className='btn btn-primary' onClick={unMuteAudio}>Unmute Audio</button>}
+                {mediaBlobUrl && <button className='btn btn-primary' onClick={clearBlobUrl}>Clear Recording</button>}
+                {mediaBlobUrl && <video src={mediaBlobUrl} controls autoPlay loop />}
+              </div>
+            )}
+          />
+        <div className='w-full flex justify-center items-center mx-0'>
+          <Button varient="success" disabled={n.split(" ").join("") === ""} onClick={() => {
+            axios.post('https://csv-v3-api.vercel.app/api/story/', {
+              story: {
+                name: n,
+                description: editor
+              }
+            }).then(res => {
+              window.location.href = `/story/${res.data._id}`
+            })
+          }}>
+            Submit
+          </Button>
         </div>
 
-    </div>
+      </div>
     </>
   )
 }
