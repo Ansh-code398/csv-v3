@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 // import Form from '../components/Form'
 import showdown from 'showdown';
-import { Button } from '@mui/material';
+import { Button, Icon, Typography } from '@mui/material';
 import axios from 'axios';
 import Navbar from '../components/Navbar'
 import { ReactMediaRecorder } from "react-media-recorder";
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import { IconButton } from '@mui/material';
 
 const NewPet = () => {
   //Markdown to Json converter
@@ -164,10 +167,13 @@ const NewPet = () => {
             </div>
           </div>
         </div>
-        <div className="btn-group" role="group" aria-label="Basic example" style={{ display: 'flex', justifyContent: 'center' }}>
-          <button id="prv_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }} onClick={onPrvClick} ref={prv_btn}><i className="fa fa-step-backward text-black" aria-hidden="true" /></button>
-          <button id="nxt_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }} onClick={OnNxtClick} ref={nxt_btn}><i className="fa fa-step-forward text-black" aria-hidden="true" /></button>
-
+        <div className="btn-group" role="group" style={{ display: 'flex', justifyContent: 'center' }}>
+          <IconButton style={{ maxWidth: '50px' }} color="inherit" onClick={onPrvClick} ref={prv_btn}>
+            <SkipPreviousIcon />
+          </IconButton>
+          <IconButton style={{ maxWidth: '50px' }} color="inherit" onClick={OnNxtClick} ref={nxt_btn}>
+            <SkipNextIcon />
+          </IconButton>
         </div>
           <ReactMediaRecorder
             screen
@@ -178,14 +184,16 @@ const NewPet = () => {
             }
             render={({status, startRecording, resumeRecording, pauseRecording, stopRecording, mediaBlobUrl, muteAudio, unMuteAudio, isAudioMuted, clearBlobUrl}) => (
               <div className='text-center my-2'>
-                {status === "idle" || status === "stopped" && <Button color='success' variant='outlined' onClick={startRecording}>Start Recording</Button>}
-                {status === "recording" && !paused ? <button className='btn btn-primary' onClick={() => {pauseRecording(); setPaused(true)}}>Pause Recording</button> :
-                <button className='btn btn-primary' onClick={()=> {resumeRecording(); setPaused(false)}}>Resume Recording</button>}
-                {status === "recording" && <button className='btn btn-primary' onClick={stopRecording}>Stop Recording</button>}
-                {status === "recording" && !isAudioMuted ? <button className='btn btn-primary' onClick={muteAudio}>Mute Audio</button> : 
-                <button className='btn btn-primary' onClick={unMuteAudio}>Unmute Audio</button>}
-                {mediaBlobUrl && <button className='btn btn-primary' onClick={clearBlobUrl}>Clear Recording</button>}
+                <Typography variant="h6" className="text-center">
+                  Recording Status - {status.toUpperCase().split("_").join(" ")}
+                </Typography>
+                {status === "idle" && <Button color='success' variant='outlined' className='mx-2' onClick={startRecording}>Start Recording</Button>}
+                {status === "recording" ? <Button color='success' variant='outlined' className='mx-2 my-2' onClick={pauseRecording}>Pause Recording</Button> :  status === "paused" && <Button color='success' variant='outlined' className='mx-2' onClick={resumeRecording}>Resume Recording</Button>}
+                {status !== "idle" && <Button color='success' variant='outlined' className='mx-2 my-3' onClick={stopRecording}>Stop Recording</Button>}
+                {status !== "idle" && !isAudioMuted ? <Button color='success' variant='outlined' className='mx-2' onClick={muteAudio}>Mute Audio</Button> : 
+                <Button color='success' variant='outlined' className='mx-2' onClick={unMuteAudio}>Unmute Audio</Button>}
                 {mediaBlobUrl && <video src={mediaBlobUrl} controls autoPlay loop />}
+                {mediaBlobUrl && <Button color='success' variant='outlined' className='mx-2 my-2' onClick={clearBlobUrl}>Clear Recording</Button>}
               </div>
             )}
           />
