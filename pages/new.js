@@ -182,7 +182,7 @@ const NewPet = () => {
                 type: "video/mp4"
               }
             }
-            render={({status, startRecording, resumeRecording, pauseRecording, stopRecording, mediaBlobUrl, muteAudio, unMuteAudio, isAudioMuted, clearBlobUrl}) => (
+            render={({status, startRecording, resumeRecording, pauseRecording, stopRecording, mediaBlobUrl, muteAudio, unMuteAudio, isAudioMuted, clearBlobUrl, previewStream}) => (
               <div className='text-center my-2'>
                 <Typography variant="h6" className="text-center">
                   Recording Status - {status.toUpperCase().split("_").join(" ")}
@@ -192,7 +192,7 @@ const NewPet = () => {
                 {status !== "idle" && <Button color='success' variant='outlined' className='mx-2 my-3' onClick={stopRecording}>Stop Recording</Button>}
                 {status !== "idle" && !isAudioMuted ? <Button color='success' variant='outlined' className='mx-2' onClick={muteAudio}>Mute Audio</Button> : 
                 <Button color='success' variant='outlined' className='mx-2' onClick={unMuteAudio}>Unmute Audio</Button>}
-                {mediaBlobUrl && <video src={mediaBlobUrl} controls autoPlay loop />}
+                {mediaBlobUrl ? <video className='mx-auto' src={mediaBlobUrl} controls autoPlay loop width={500} height={500} /> : previewStream && <VideoPreview stream={previewStream} />}
                 {mediaBlobUrl && <Button color='success' variant='outlined' className='mx-2 my-2' onClick={clearBlobUrl}>Clear Recording</Button>}
               </div>
             )}
@@ -216,5 +216,20 @@ const NewPet = () => {
     </>
   )
 }
+
+const VideoPreview = ({ stream }) => {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [stream]);
+  
+  if (!stream) {
+    return null;
+  }
+  return <video className='mx-auto' ref={videoRef} width={500} height={500} autoPlay controls />;
+};
 
 export default NewPet
