@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 // import Form from '../components/Form'
 import showdown from 'showdown';
-import { Button, Icon, Typography } from '@mui/material';
+import { Button, Icon, Tooltip, Typography } from '@mui/material';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
+import DownloadIcon from '@mui/icons-material/Download';
 import { IconButton } from '@mui/material';
 
 const NewPet = () => {
@@ -14,8 +15,7 @@ const NewPet = () => {
   const nxt_btn = useRef();
   const [editor, setEditor] = useState("---\n{{time:100}}\n{{bg_typ:img}}\n{{bg_link:https://picsum.photos/1000/1000}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 1\n## Scenes\n---\n{{time:100}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 2\n---\n{{time:100}}\n{{bg_typ:ytv}}\n{{bg_link:https://www.youtube.com/embed/jV3xxOoWe-4}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 3\n\t\t\t");
 
-  const [n, setN] = useState("Billinger.md");
-  const [paused, setPaused] = useState(false);
+  const [n, setN] = useState("Test");
 
   const name = useRef()
 
@@ -29,6 +29,18 @@ const NewPet = () => {
       }
     }
     return arr;
+  }
+  function onDownload() {
+    var blob = new Blob([editor], { type: "text/plain;charset=utf-8" });
+    saveAs(blob, n + ".csvs");
+  }
+  function saveAs(blob, fileName) {
+    var url = window.URL.createObjectURL(blob);
+    var anchorElem = document.createElement("a");
+    anchorElem.href = url;
+    anchorElem.download = fileName;
+    anchorElem.click();
+    window.URL.revokeObjectURL(url);
   }
 
   function markdown_to_json(content) {
@@ -170,6 +182,10 @@ const NewPet = () => {
           <IconButton style={{ maxWidth: '50px' }} color="inherit" onClick={onPrvClick} ref={prv_btn}>
             <SkipPreviousIcon />
           </IconButton>
+          {n && <IconButton style={{ maxWidth: '50px' }} color="inherit" onClick={onDownload}>
+            <DownloadIcon />
+          </IconButton>
+          }
           <IconButton style={{ maxWidth: '50px' }} color="inherit" onClick={OnNxtClick} ref={nxt_btn}>
             <SkipNextIcon />
           </IconButton>
