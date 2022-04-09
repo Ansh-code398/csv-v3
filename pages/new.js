@@ -3,8 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import showdown from 'showdown';
 import { Button, Icon, Typography } from '@mui/material';
 import axios from 'axios';
-import Navbar from '../components/Navbar'
-import { ReactMediaRecorder } from "react-media-recorder";
+import Navbar from '../components/Navbar';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import { IconButton } from '@mui/material';
@@ -175,28 +174,6 @@ const NewPet = () => {
             <SkipNextIcon />
           </IconButton>
         </div>
-          <ReactMediaRecorder
-            screen
-            blobPropertyBag={
-              {
-                type: "video/mp4"
-              }
-            }
-            render={({status, startRecording, resumeRecording, pauseRecording, stopRecording, mediaBlobUrl, muteAudio, unMuteAudio, isAudioMuted, clearBlobUrl, previewStream}) => (
-              <div className='text-center my-2'>
-                <Typography variant="h6" className="text-center">
-                  Recording Status - {status.toUpperCase().split("_").join(" ")}
-                </Typography>
-                {status === "idle" && <Button color='success' variant='outlined' className='mx-2' onClick={startRecording}>Start Recording</Button>}
-                {status === "recording" ? <Button color='success' variant='outlined' className='mx-2 my-2' onClick={pauseRecording}>Pause Recording</Button> :  status === "paused" && <Button color='success' variant='outlined' className='mx-2' onClick={resumeRecording}>Resume Recording</Button>}
-                {status !== "idle" && <Button color='success' variant='outlined' className='mx-2 my-3' onClick={stopRecording}>Stop Recording</Button>}
-                {status !== "idle" && !isAudioMuted ? <Button color='success' variant='outlined' className='mx-2' onClick={muteAudio}>Mute Audio</Button> : 
-                <Button color='success' variant='outlined' className='mx-2' onClick={unMuteAudio}>Unmute Audio</Button>}
-                {mediaBlobUrl ? <video className='mx-auto' src={mediaBlobUrl} controls autoPlay loop width={500} height={500} /> : previewStream && <VideoPreview stream={previewStream} />}
-                {mediaBlobUrl && <Button color='success' variant='outlined' className='mx-2 my-2' onClick={clearBlobUrl}>Clear Recording</Button>}
-              </div>
-            )}
-          />
         <div className='w-full flex justify-center items-center mx-0'>
           <Button varient="success" disabled={n.split(" ").join("") === ""} onClick={() => {
             axios.post('https://csv-v3-api.vercel.app/api/story/', {
@@ -216,20 +193,5 @@ const NewPet = () => {
     </>
   )
 }
-
-const VideoPreview = ({ stream }) => {
-  const videoRef = useRef(null);
-
-  useEffect(() => {
-    if (videoRef.current && stream) {
-      videoRef.current.srcObject = stream;
-    }
-  }, [stream]);
-  
-  if (!stream) {
-    return null;
-  }
-  return <video className='mx-auto' ref={videoRef} width={500} height={500} autoPlay controls />;
-};
 
 export default NewPet
