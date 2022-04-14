@@ -25,11 +25,11 @@ export default function SignIn(props) {
   const handleSubmit = async(event) => {
     event.preventDefault();
     try {
-        const data = await axios.post('https://csvoyager-api.vercel.app/api/auth/login', {
+        const data = await axios.post('https://csv-v3-api.vercel.app/api/auth/login', {
           email: email.current.value,
           password: password.current.value
         });
-        localStorage.setItem('user', JSON.stringify(data.data));
+        localStorage.setItem('user', data.data._id);
         props.setUser(data.data);
         router.push('/');
       }

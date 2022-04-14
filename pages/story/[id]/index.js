@@ -156,6 +156,6 @@ export async function getServerSideProps(ctx) {
         props: {
         // props to pass to the page component
         story: data.story,
-        },
+      },
     }
     }

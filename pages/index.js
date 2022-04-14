@@ -4,12 +4,12 @@ import Link from "next/link"
 import { useRef } from "react"
 import Navbar from '../components/Navbar'
 
-const Index = ({ stories }) => {
+const Index = ({ stories, user, setUser }) => {
   const followEmail = useRef();
   return (
     <>
         <div className="video-app w-screen h-screen mx-0">
-          <Navbar/>
+          <Navbar user={user} setUser={setUser}/>
           <div className="wrapper">
             <div className="left-side">
               <div className="side-wrapper">

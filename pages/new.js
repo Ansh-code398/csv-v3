@@ -9,7 +9,7 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 import DownloadIcon from '@mui/icons-material/Download';
 import { IconButton } from '@mui/material';
 
-const NewPet = () => {
+const NewPet = ({ user, setUser }) => {
   //Markdown to Json converter
   const prv_btn = useRef();
   const nxt_btn = useRef();
@@ -161,7 +161,7 @@ const NewPet = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar user={user} setUser={setUser}/>
       <div className="contained align-text-center">
         <div className="align-text-center mt-5 mb-3">
           <label htmlFor="exampleFormControlInput1" className="align-text-center form-label" ref={name} required>Document Name</label>
