@@ -47,7 +47,7 @@ function StoryPreview({ scenes, max_scene }) {
             }}              
         >
             <AutoPlaySwipeableViews
-                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                // axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={activeStep}
                 onChangeIndex={handleStepChange}
                 enableMouseEvents={true}
