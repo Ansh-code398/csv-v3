@@ -2,10 +2,12 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useRef } from 'react'
 import showdown from 'showdown';
-import Navbar from '../../../components/Navbar'
-
-const Index = ({story}) => {
-const prv_btn = useRef();
+import Markdown from 'markdown-to-jsx';
+import { compiler } from 'markdown-to-jsx';
+import StoryPreview from '../../../components/StoryPreview';
+const Index = ({ story }) => {
+  var converter = new showdown.Converter();
+  const prv_btn = useRef();
   const nxt_btn = useRef();
 
   function removeItemAll(arr, value) {
@@ -27,7 +29,7 @@ const prv_btn = useRef();
 
     var index = markdown_scenes.indexOf("");
     markdown_scenes = removeItemAll(markdown_scenes, "");
-   let  scenes = [];
+    let scenes = [];
     let markdown_scene_no = 0;
     for (markdown_scene_no in markdown_scenes) {
       let pattern = /\{\{.*?\}\}/gm;
@@ -46,6 +48,7 @@ const prv_btn = useRef();
       scene_json["no"] = parseInt(markdown_scene_no) + 1;
       scenes.push(scene_json);
     }
+    console.log(scenes)
     return scenes;
   }
 
@@ -67,16 +70,13 @@ const prv_btn = useRef();
     }
     else if (scence["bg_typ"] == "ytv") {
       var v_link = scence["bg_link"];
-      //document.getElementById("player_container").style.display = "none"
-      console.log(v_link)
       document.getElementById('box_no' + scence["no"]).innerHTML += '<iframe id="iframe" height="100%" allowfullscreen width="100%" frameborder="0" src="' + v_link + '?autoplay=1&loop=1&mute=1&controls=0&disablekb&rel=0"></iframe>';
-      console.log(v_link);//document.getElementById("iframe").setAttribute("src",v_link+'?autoplay=1&loop=1&mute=1&controls=0&disablekb&rel=0');
-      
+      //document.getElementById("iframe").setAttribute("src",v_link+'?autoplay=1&loop=1&mute=1&controls=0&disablekb&rel=0');
+
     }
   }
 
   function set_text(scence) {
-    var converter = new showdown.Converter();
     var html_rendering = converter.makeHtml(scence["md_text"]);
     console.log(scence);
     document.getElementById("box_no" + scence["no"]).innerHTML = "<div class='" + scence["class"] + "'>" + html_rendering + "</div>";
@@ -105,7 +105,7 @@ const prv_btn = useRef();
   var current_scene = 1;
   var max_scene = 0;
 
-   function onPrvClick () {
+  function onPrvClick() {
     current_scene -= 1;
     location.href = "#box_no" + (current_scene);
     if ((min_scene + 1) === current_scene) {
@@ -116,7 +116,7 @@ const prv_btn = useRef();
       nxt_btn.current.classList.remove("disabled");
     }
   };
-  function OnNxtClick () {
+  function OnNxtClick() {
     current_scene += 1;
     location.href = "#box_no" + (current_scene);
     if (max_scene == current_scene) {
@@ -127,23 +127,23 @@ const prv_btn = useRef();
       prv_btn.current.classList.remove("disabled");
     }
   }
-  //code next to it is to start showing pic even if user didn't give input
+
   useEffect(() => {
-    render_md_to_stage();
-  }, [])
-  
+    // render_md_to_stage();
+  }, [current_scene])
+
   return (
     <div>
-      <Navbar/>
-        <div id="previewer" className='w-screen mx-0' style={{width: '100%'}} frameBorder={0}>
-          <div id="player_container" className="player_container w-full">
-          </div>
-        </div>
-        <div className="btn-group" role="group" aria-label="Basic example" style={{ display: 'flex', justifyContent: 'center' }}>
+      <div id="previewer" className='w-screen mx-0' style={{ width: '100%' }} frameBorder={0}>
+        {/* <div id="player_container" className="player_container w-full"> */}
+          <StoryPreview scenes={markdown_to_json(story.description)} max_scene={markdown_to_json(story.description).length} />
+        {/* </div> */}
+      </div>
+      {/* <div className="btn-group" role="group" aria-label="Basic example" style={{ display: 'flex', justifyContent: 'center' }}>
         <button id="prv_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }} onClick={onPrvClick} ref={prv_btn}><i className="fa fa-step-backward text-black" aria-hidden="true" /></button>
         <button id="pause_btn" type="button" className="btn btn-secondary" style={{ maxWidth: '50px' }}></button>
-        <button id="nxt_btn" type="button" className="btn btn-secondary text-black" style={{ maxWidth: '50px' }} onClick={OnNxtClick} ref={nxt_btn}><i className="fa fa-step-forward" aria-hidden="true"  /></button>
-      </div>
+        <button id="nxt_btn" type="button" className="btn btn-secondary text-black" style={{ maxWidth: '50px' }} onClick={OnNxtClick} ref={nxt_btn}><i className="fa fa-step-forward" aria-hidden="true" /></button>
+      </div> */}
     </div>
   )
 }
@@ -151,11 +151,11 @@ const prv_btn = useRef();
 export default Index;
 
 export async function getServerSideProps(ctx) {
-    const data = await (await axios.get(`https://csv-v3-api.vercel.app/api/story/${ctx.query.id}`)).data;
-    return {
-        props: {
-        // props to pass to the page component
-        story: data.story,
-      },
-    }
-    }
+  const data = await (await axios.get(`https://csv-v3-api.vercel.app/api/story/${ctx.query.id}`)).data;
+  return {
+    props: {
+      // props to pass to the page component
+      story: data.story,
+    },
+  }
+}

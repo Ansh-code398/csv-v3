@@ -150,10 +150,6 @@ const NewPet = ({ user, setUser }) => {
       prv_btn.current.classList.remove("disabled");
     }
   }
-  //code next to it is to start showing pic even if user didn't give input
-  useEffect(() => {
-    render_md_to_stage();
-  }, [])
 
   useEffect(() => {
     render_md_to_stage();
