@@ -19,6 +19,7 @@ function StoryPreview({ scenes, max_scene }) {
     const theme = useTheme();
     const [activeStep, setActiveStep] = React.useState(0);
     const [nxtTransistion, setNxtTransistion] = React.useState();
+    const [nxtTransistionAnimEnabled, setNxtTransistionAnimEnabled] = React.useState();
     const maxSteps = max_scene;
 
     const handleNext = () => {
@@ -32,6 +33,7 @@ function StoryPreview({ scenes, max_scene }) {
     const handleStepChange = (step) => {
         setActiveStep(step);
         setNxtTransistion(scenes[step].time);
+        setNxtTransistionAnimEnabled(Boolean(scenes[step].animate) || false);
     };
 
     return (
@@ -40,7 +42,11 @@ function StoryPreview({ scenes, max_scene }) {
                 minWidth: '100%',
                 minHeight: '100%',
                 maxWidth: '100%',
+                margin: '0',
+                padding: '0',
+                width: '100%',
                 display: 'flex',
+                flex: '1',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center'
@@ -48,22 +54,28 @@ function StoryPreview({ scenes, max_scene }) {
         >
             <AutoPlaySwipeableViews
                 // axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                animateTransitions={nxtTransistionAnimEnabled}
                 index={activeStep}
                 onChangeIndex={handleStepChange}
-                enableMouseEvents={true}
+                // enableMouseEvents={true}
                 interval={nxtTransistion}
-                style={{maxWidth: '100%', maxHeight: '100%'}}
+                style={{maxWidth: '100%', maxHeight: '100%', width: '100%', height: '100%'}}
             >
                 {scenes.map((scence, index) => {
                     const bg_link = scence.bg_link
                     return (
                         <div id={"box_no" + (index + 1)} className="scence_box" style={{
                             backgroundImage: `url(${bg_link ? bg_link : ''})`,
-                            backgroundSize: 'cover',
                             backgroundRepeat: 'no-repeat',
                             overflow: 'hidden',
                             objectFit: 'cover',
-                            backgroundPosition: 'center',                         
+                            backgroundPosition: 'center',    
+                            backgroundSize: 'cover',
+                            maxHeight: '95%',
+                            maxWidth: '100%',
+                            flex: '1',
+                            margin: 0
+                        
                         }} key={index}>
                             <div className={scence.class} style={{maxWidth: '100%', maxHeight: '100%'}} dangerouslySetInnerHTML={{ __html: converter.makeHtml(scence.md_text) }} />
                         </div>
