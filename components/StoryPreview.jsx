@@ -24,6 +24,7 @@ function StoryPreview({ scenes, max_scene }) {
     const [activeStep, setActiveStep] = React.useState(0);
     const [nxtTransistion, setNxtTransistion] = React.useState();
     const [nxtTransistionAnimEnabled, setNxtTransistionAnimEnabled] = React.useState();
+    const [videoZIndex, setVideoZIndex] = React.useState(-10);
     const maxSteps = max_scene;
 
     const handleNext = () => {
@@ -33,16 +34,16 @@ function StoryPreview({ scenes, max_scene }) {
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
-    
+
     const handleStepChange = (step) => {
         setActiveStep(step);
         setNxtTransistion(scenes[step].time);
         setNxtTransistionAnimEnabled(Boolean(scenes[step].animate) || false);
     };
-    
+
     return (
         <Box
-        sx={{
+            sx={{
                 minWidth: '100%',
                 minHeight: '100%',
                 maxWidth: '100%',
@@ -54,8 +55,8 @@ function StoryPreview({ scenes, max_scene }) {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center'
-            }}              
-            >
+            }}
+        >
             <AutoPlaySwipeableViews
                 // axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 animateTransitions={nxtTransistionAnimEnabled}
@@ -63,8 +64,8 @@ function StoryPreview({ scenes, max_scene }) {
                 onChangeIndex={handleStepChange}
                 // enableMouseEvents={true}
                 interval={nxtTransistion}
-                style={{maxWidth: '100%', maxHeight: '100%', width: '100%', height: '100%'}}
-                >
+                style={{ maxWidth: '100%', maxHeight: '100%', width: '100%', height: '100%' }}
+            >
                 {scenes.map((scence, index) => {
                     const bg_link = scence.bg_link
                     return (
@@ -73,31 +74,34 @@ function StoryPreview({ scenes, max_scene }) {
                             backgroundRepeat: 'no-repeat',
                             overflow: 'hidden',
                             objectFit: 'cover',
-                            backgroundPosition: 'center',    
+                            backgroundPosition: 'center',
                             backgroundSize: 'cover',
                             maxHeight: '95%',
                             maxWidth: '100%',
                             flex: '1',
                             margin: 0
-                            
                         }} key={index}>
-                            <div className={scence.class} style={{maxWidth: '100%', maxHeight: '100%'}} dangerouslySetInnerHTML={{ __html: converter.makeHtml(scence.md_text) }} />
-                            {scence.bg_typ === "ytv" && (
-                                <YouTube
-                                videoId={bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}               
-                                className="w-full h-full"
-                                containerClassName="absolute -z-10 w-full h-full top-0 max-h-[95%]"
-                                onReady={(event) => {
-                                    // access to player in all event handlers via event.target
-                                    event.target.playVideo();
-                                }}
-                                opts={{
-                                    playerVars: {
-                                        autoplay: 1,
-                                        controls: 0,
-                                    }
-                                }}
-                              />
+                            {activeStep === index && (
+                                <>
+                                    <div className={scence.class} style={{ maxWidth: '100%', maxHeight: '100%' }} dangerouslySetInnerHTML={{ __html: converter.makeHtml(scence.md_text) }} />
+                                    {scence.bg_typ === "ytv" && (
+                                        // <YouTube
+                                        //     videoId={bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}
+                                        //     containerClassName="absolute -z-10 w-full h-full top-0 max-h-[95%]"
+                                        //     opts={{
+                                        //         width: '100%',
+                                        //         height: '100%',
+                                        //         playerVars: {
+                                        //             autoplay: 1,
+                                        //             controls: 0,
+                                        //         }
+                                        //     }}
+                                        // />
+                                        <div className='absolute -z-10 w-full h-full top-0 max-h-[95%]'>
+                                            <iframe src={`https://youtube.com/embed/${bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}?autoplay=1&mute=1&controls=0&loop=1&color="white"`} frameBorder="0" allow="autoplay;" width="100%" height="100%"></iframe>
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </div>
                     )
@@ -133,13 +137,13 @@ function StoryPreview({ scenes, max_scene }) {
                     </Button>
                 }
             />
-            <div className="flex mt-2">   
-            <IconButton>
-            <EditIcon/>
-            </IconButton>
-            <IconButton>
-            <DeleteForeverIcon/>
-            </IconButton>
+            <div className="flex mt-2">
+                <IconButton>
+                    <EditIcon />
+                </IconButton>
+                <IconButton>
+                    <DeleteForeverIcon />
+                </IconButton>
             </div>
         </Box>
     );
