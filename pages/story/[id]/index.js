@@ -124,7 +124,7 @@ const Index = ({ story, user, storyId }) => {
 export default Index;
 
 export async function getServerSideProps(ctx) {
-  const data = await (await axios.get(`https://csv-v3-api.vercel.app/api/story/${ctx.query.id}`).catch(e=>{})).data;
+  const data = await (await axios.get(`https://csv-v3-api.vercel.app/api/story/${ctx.query.id}`).catch(e=>{}))?.data;
   if(!data){
     return {
       props: {
