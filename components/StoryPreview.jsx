@@ -11,20 +11,20 @@ import SwipeableViews from 'react-swipeable-views';
 import showdown from 'showdown';
 import { autoPlay } from 'react-swipeable-views-utils';
 import EditIcon from '@mui/icons-material/Edit';
-import { IconButton } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import YouTube from 'react-youtube';
-
+import { useRouter } from 'next/router';
+import axios from 'axios';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 
-function StoryPreview({ scenes, max_scene }) {
+function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, showIcons }) {
+    const router = useRouter();
     const converter = new showdown.Converter();
     const theme = useTheme();
     const [activeStep, setActiveStep] = React.useState(0);
     const [nxtTransistion, setNxtTransistion] = React.useState();
     const [nxtTransistionAnimEnabled, setNxtTransistionAnimEnabled] = React.useState();
-    const [videoZIndex, setVideoZIndex] = React.useState(-10);
     const maxSteps = max_scene;
 
     const handleNext = () => {
@@ -85,20 +85,8 @@ function StoryPreview({ scenes, max_scene }) {
                                 <>
                                     <div className={scence.class} style={{ maxWidth: '100%', maxHeight: '100%' }} dangerouslySetInnerHTML={{ __html: converter.makeHtml(scence.md_text) }} />
                                     {scence.bg_typ === "ytv" && (
-                                        // <YouTube
-                                        //     videoId={bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}
-                                        //     containerClassName="absolute -z-10 w-full h-full top-0 max-h-[95%]"
-                                        //     opts={{
-                                        //         width: '100%',
-                                        //         height: '100%',
-                                        //         playerVars: {
-                                        //             autoplay: 1,
-                                        //             controls: 0,
-                                        //         }
-                                        //     }}
-                                        // />
                                         <div className='absolute -z-10 w-full h-full top-0 max-h-[95%]'>
-                                            <iframe src={`https://youtube.com/embed/${bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}?autoplay=1&mute=1&controls=0&loop=1&color="white"`} frameBorder="0" allow="autoplay;" width="100%" height="100%"></iframe>
+                                            <iframe src={`https://youtube.com/embed/${bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}?autoplay=1&mute=1&controls=0&color="white"&loop=1`} frameBorder="0" allow="autoplay; loop;" width="100%" height="100%"></iframe>
                                         </div>
                                     )}
                                 </>
@@ -109,8 +97,8 @@ function StoryPreview({ scenes, max_scene }) {
             </AutoPlaySwipeableViews>
             <MobileStepper
                 steps={maxSteps}
-                position="static"
                 variant='text'
+                position="static"
                 activeStep={activeStep}
                 nextButton={
                     <Button
@@ -136,15 +124,33 @@ function StoryPreview({ scenes, max_scene }) {
                         Back
                     </Button>
                 }
+                
             />
-            <div className="flex mt-2">
-                <IconButton>
-                    <EditIcon />
-                </IconButton>
-                <IconButton>
-                    <DeleteForeverIcon />
-                </IconButton>
-            </div>
+            {showIcons && <div className="flex mt-2">
+                {user?._id === storyUserId &&
+                    <>
+                        <Tooltip title="Edit Story">
+                            <IconButton onClick={()=>{
+                                setEdit(!edit)
+                            }}>
+                                <EditIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete Story">
+                            <IconButton onClick={() => {
+                                axios.delete(`https://csv-v3-api.vercel.app/api/story/${router.query.id}/${user._id}`, {
+                                    userId: user._id
+                                }).then(res => {
+                                    router.push('/')
+                                }).catch(err => {
+                                    console.log(err)
+                                })
+                            }}>
+                                <DeleteForeverIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </>}
+            </div>}
         </Box>
     );
 }
