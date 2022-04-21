@@ -47,8 +47,6 @@ const NewPet = ({ user, setUser }) => {
   function markdown_to_json(content) {
     let markdown_scenes = content.split("---");
 
-    // console.log(markdown_scenes);
-
     var index = markdown_scenes.indexOf("");
     markdown_scenes = removeItemAll(markdown_scenes, "");
     let scenes = [];
@@ -66,7 +64,6 @@ const NewPet = ({ user, setUser }) => {
         scene_json[result[0]] = result[1];
         MD_text = MD_text.replace(results[r_no], "");
       }
-      console.log(scene_json);
       scene_json["md_text"] = MD_text;
       scene_json["no"] = parseInt(markdown_scene_no) + 1;
       scenes.push(scene_json);
@@ -113,7 +110,8 @@ const NewPet = ({ user, setUser }) => {
             axios.post('https://csv-v3-api.vercel.app/api/story/', {
               story: {
                 name: n,
-                description: editor
+                description: editor,
+                userId: user._id
               }
             }).then(res => {
               window.location.href = `/story/${res.data._id}`

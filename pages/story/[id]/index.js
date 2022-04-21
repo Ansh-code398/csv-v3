@@ -21,8 +21,6 @@ const Index = ({ story }) => {
   function markdown_to_json(content) {
     let markdown_scenes = content.split("---");
 
-    // console.log(markdown_scenes);
-
     var index = markdown_scenes.indexOf("");
     markdown_scenes = removeItemAll(markdown_scenes, "");
     let scenes = [];
@@ -45,7 +43,6 @@ const Index = ({ story }) => {
       scene_json["no"] = parseInt(markdown_scene_no) + 1;
       scenes.push(scene_json);
     }
-    console.log(scenes)
     return scenes;
   }
   
