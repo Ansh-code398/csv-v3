@@ -3,6 +3,8 @@ import axios from 'axios';
 import React, { useState, useRef } from 'react'
 import DownloadIcon from '@mui/icons-material/Download';
 import StoryPreview from '../../../components/StoryPreview';
+import { injectStyle } from "react-toastify/dist/inject-style";
+import { toast, ToastContainer } from 'react-toastify';
 const Index = ({ story, user, storyId }) => {
   function removeItemAll(arr, value) {
     var i = 0;
@@ -37,7 +39,9 @@ const Index = ({ story, user, storyId }) => {
     window.URL.revokeObjectURL(url);
   }
 
-
+  React.useEffect(() => {
+    injectStyle();
+  }, []);
   function markdown_to_json(content) {
     let markdown_scenes = content.split("---");
 
@@ -99,6 +103,7 @@ const Index = ({ story, user, storyId }) => {
           </div>
           <div className='w-full flex justify-center items-center mx-0'>
             <Button varient="success" disabled={n.split(" ").join("") === ""} onClick={() => {
+               const t = toast.loading('Updating Story...');
               axios.put(`https://csv-v3-api.vercel.app/api/story/${storyId}`, {
                 userId: user._id,
                 story: {
@@ -107,8 +112,10 @@ const Index = ({ story, user, storyId }) => {
                   userId: user._id,
                 }
               }).then(res => {
+                toast.update(t, { render: "Updated Story...", type: "success", isLoading: false, autoClose: 2000 });
                 window.location.reload();
               }).catch(err => {
+                toast.update(t, { render: "Error in Updating Story...", type: "error", isLoading: false, autoClose: 3000 });
                 console.log(err);
               })
             }}>
@@ -124,17 +131,17 @@ const Index = ({ story, user, storyId }) => {
 export default Index;
 
 export async function getServerSideProps(ctx) {
-  const data = await (await axios.get(`https://csv-v3-api.vercel.app/api/story/${ctx.query.id}`).catch(e=>{}))?.data;
-  if(!data){
+  const data = await (await axios.get(`https://csv-v3-api.vercel.app/api/story/${ctx.query.id}`).catch(e => { }))?.data;
+  if (!data) {
     return {
       props: {
         story: {
           name: "404 Not Found",
           description: "---\n{{time:1000}}\n{{animate: true}}\n{{bg_typ:img}}\{{bg_link:https://www.online-tech-tips.com/wp-content/uploads/2022/03/image-41.jpeg}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center text-black cursor-pointer transition-all duration-1000 hover:bg-white}}\n# Are You Lost?\n[Go Home](/)"
         }
+      }
     }
   }
-}
   return {
     props: {
       storyId: ctx.query.id,

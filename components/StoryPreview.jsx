@@ -15,7 +15,11 @@ import { IconButton, Tooltip } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { injectStyle } from "react-toastify/dist/inject-style";
+
+import { toast, ToastContainer } from 'react-toastify';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+
 
 
 function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, showIcons }) {
@@ -40,6 +44,9 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
         setNxtTransistion(scenes[step].time);
         setNxtTransistionAnimEnabled(Boolean(scenes[step].animate) || false);
     };
+    React.useEffect(() => {
+        injectStyle();
+    }, []);
 
     return (
         <Box
@@ -84,12 +91,12 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
                             {activeStep === index && (
                                 <>
                                     <div className={scence.class} style={{ maxWidth: '100%', maxHeight: '100%' }} dangerouslySetInnerHTML={{ __html: converter.makeHtml(scence.md_text) }} />
-                                    {scence.bg_typ === "ytv" && (
-                                        <div className='absolute -z-10 w-full h-full top-0 max-h-[95%]'>
-                                            <iframe src={`https://youtube.com/embed/${bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}?autoplay=1&mute=1&controls=0&color="white"&loop=1`} frameBorder="0" allow="autoplay; loop;" width="100%" height="100%"></iframe>
-                                        </div>
-                                    )}
                                 </>
+                            )}
+                            {scence.bg_typ === "ytv" && (
+                                <div className='absolute -z-10 w-full h-full top-0 max-h-[95%]'>
+                                    <iframe src={`https://youtube.com/embed/${bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}?&playlist=${bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}&autoplay=1&mute=1&color="white"&loop=1&rel=0&modestbranding=1&autohide=1&showinfo=0&controls=0`} frameBorder="0" allow="autoplay; loop;" width="100%" height="100%"></iframe>
+                                </div>
                             )}
                         </div>
                     )
@@ -124,13 +131,13 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
                         Back
                     </Button>
                 }
-                
+
             />
             {showIcons && <div className="flex mt-2">
                 {user?._id === storyUserId &&
                     <>
                         <Tooltip title="Edit Story">
-                            <IconButton onClick={()=>{
+                            <IconButton onClick={() => {
                                 setEdit(!edit)
                             }}>
                                 <EditIcon />
@@ -138,17 +145,21 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
                         </Tooltip>
                         <Tooltip title="Delete Story">
                             <IconButton onClick={() => {
+                                const t = toast.loading('Deleting Story...');
                                 axios.delete(`https://csv-v3-api.vercel.app/api/story/${router.query.id}/${user._id}`, {
                                     userId: user._id
                                 }).then(res => {
                                     router.push('/')
+                                    toast.update(t, { render: "Deleted Story...", type: "success", isLoading: false, autoClose: 2000 });
                                 }).catch(err => {
                                     console.log(err)
+                                    toast.update(t, { render: "Error in Deleting Story...", type: "error", isLoading: false, autoClose: 3000 });
                                 })
                             }}>
                                 <DeleteForeverIcon />
                             </IconButton>
                         </Tooltip>
+                        <ToastContainer />
                     </>}
             </div>}
         </Box>
