@@ -71,13 +71,26 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
                 onChangeIndex={handleStepChange}
                 // enableMouseEvents={true}
                 interval={nxtTransistion}
+                allowFullScreen={true}
                 style={{ maxWidth: '100%', maxHeight: '100%', width: '100%', height: '100%' }}
             >
                 {scenes.map((scence, index) => {
                     const bg_link = scence.bg_link
                     return (
                         <motion.div id={"box_no" + (index + 1)} className="scence_box"
-                        animate={{
+                        initial={{
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundColor: '#000',
+                            opacity: 0,
+                            transition: {
+                                duration: 0.5,
+                                ease: "easeInOut"
+                            }
+                        }}
+                        hidden={index !== activeStep}
+                        whileInView={{
                             backgroundImage: scence.bg_typ === "img" && `url(${bg_link ? bg_link : ''})`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
@@ -85,7 +98,7 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
                             backgroundColor: '#000',
                             opacity: 1,
                             transition: {
-                                duration: 0.5,
+                                duration: 1,
                                 ease: "easeInOut"
                             }
                         }}
@@ -111,7 +124,7 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
                                             duration: 0.5,
                                             ease: "easeInOut"
                                         }
-                                    }} className={scence.class}  style={{ maxWidth: '100%', maxHeight: '100%', minHeight: '90%', minWidth: '100%', opacity: '0', transform: `translateX(${Math.random(-200, 200) * 100}%)`}} dangerouslySetInnerHTML={{ __html: converter.makeHtml(scence.md_text) }} />
+                                    }} className={scence.class}  style={{ maxWidth: '100%', maxHeight: '100%', minHeight: '90%', minWidth: '100%', opacity: '0', transform: `translateX(${Math.random(-200, 200) * 1000}%)`}} dangerouslySetInnerHTML={{ __html: converter.makeHtml(scence.md_text) }} />
                                 </>
                             )}
                             {scence.bg_typ === "ytv" && (
