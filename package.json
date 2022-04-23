@@ -17,6 +17,7 @@
     "axios": "^0.26.1",
     "cors": "^2.8.5",
     "email-validator": "^2.0.4",
+    "framer-motion": "^6.3.1",
     "markdown-to-jsx": "^7.1.7",
     "marked": "^0.7.0",
     "material-ui-player": "^1.0.5",

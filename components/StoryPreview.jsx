@@ -16,7 +16,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { injectStyle } from "react-toastify/dist/inject-style";
-
+import { motion } from "framer-motion"
 import { toast, ToastContainer } from 'react-toastify';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -76,8 +76,21 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
                 {scenes.map((scence, index) => {
                     const bg_link = scence.bg_link
                     return (
-                        <div id={"box_no" + (index + 1)} className="scence_box" style={{
+                        <motion.div id={"box_no" + (index + 1)} className="scence_box"
+                        animate={{
                             backgroundImage: scence.bg_typ === "img" && `url(${bg_link ? bg_link : ''})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundColor: '#000',
+                            opacity: 1,
+                            transition: {
+                                duration: 0.5,
+                                ease: "easeInOut"
+                            }
+                        }}
+                        style={{
+                            opacity: 0,
                             backgroundRepeat: 'no-repeat',
                             overflow: 'hidden',
                             objectFit: 'cover',
@@ -90,7 +103,15 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
                         }} key={index}>
                             {activeStep === index && (
                                 <>
-                                    <div className={scence.class} style={{ maxWidth: '100%', maxHeight: '100%' }} dangerouslySetInnerHTML={{ __html: converter.makeHtml(scence.md_text) }} />
+                                    <motion.div animate={{
+                                        opacity: 1,
+                                        transform: 'translateX(0%)',
+                                        transition: {
+                                            delay: 0.2,
+                                            duration: 0.5,
+                                            ease: "easeInOut"
+                                        }
+                                    }} className={scence.class}  style={{ maxWidth: '100%', maxHeight: '100%', minHeight: '90%', minWidth: '100%', opacity: '0', transform: `translateX(${Math.random(-200, 200) * 100}%)`}} dangerouslySetInnerHTML={{ __html: converter.makeHtml(scence.md_text) }} />
                                 </>
                             )}
                             {scence.bg_typ === "ytv" && (
@@ -98,7 +119,7 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
                                     <iframe src={`https://youtube.com/embed/${bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}?&playlist=${bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}&autoplay=1&mute=1&color="white"&loop=1&rel=0&modestbranding=1&autohide=1&showinfo=0&controls=0`} frameBorder="0" allow="autoplay; loop;" width="100%" height="100%"></iframe>
                                 </div>
                             )}
-                        </div>
+                        </motion.div>
                     )
                 })}
             </AutoPlaySwipeableViews>
