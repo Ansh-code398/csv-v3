@@ -78,35 +78,11 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
                     const bg_link = scence.bg_link
                     return (
                         <motion.div id={"box_no" + (index + 1)} className="scence_box"
-                        initial={{
-                            transform: 'translateX(100)',
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundColor: '#000',
-                            opacity: 0,
-                            transition: {
-                                duration: 0.5,
-                                ease: "easeInOut"
-                            }
-                        }}
+                        initial="hidden"
                         hidden={index !== activeStep}
-                        whileInView={{
-                            transform: 'translateX(0)',
-                            backgroundImage: scence.bg_typ === "img" && `url(${bg_link ? bg_link : ''})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundColor: '#000',
-                            opacity: 1,
-                            transition: {
-                                duration: 1,
-                                ease: "easeInOut"
-                            }
-                        }}
-                        
+                        whileInView="visible"
                         style={{
-                            opacity: 0,
+                            backgroundImage: scence.bg_typ === "img" && `url(${bg_link ? bg_link : ''})`,
                             backgroundRepeat: 'no-repeat',
                             overflow: 'hidden',
                             objectFit: 'cover',
