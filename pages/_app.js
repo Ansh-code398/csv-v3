@@ -5,6 +5,7 @@ import Script from 'next/script'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+
 function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState(null);
   const router = useRouter();
@@ -22,8 +23,6 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <title>CSV V3</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" crossorigin="anonymous"></link>
       </Head>
 
       {router.pathname !== "/story/[id]" || router.pathname !== "/" && <Navbar user={user} setUser={setUser}/>}
