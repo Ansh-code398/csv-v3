@@ -81,9 +81,9 @@ const Index = ({ story, user, storyId }) => {
     <>
       <Head>
         <title>{story?.name || "CSV"}</title>
-        <meta name="description" content={story?.description || "CSV"} />
+        <meta name="description" content={story?.name || "CSV"} />
         <meta name="og:title" content={story?.name || "CSV"} />
-        <meta name="og:description" content={story?.description || "CSV"} />
+        <meta name="og:description" content={story?.name || "CSV"} />
         <meta name="og:image" content={story?.banner_url || "CSV"} />
         <meta name="og:url" content={`https://www.csv-v3.vercel.app/story/${storyId}`} />
         <meta name="twitter:title" content={story?.name || "CSV"} />
