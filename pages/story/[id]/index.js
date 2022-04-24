@@ -77,7 +77,7 @@ const Index = ({ story, user, storyId }) => {
   return (
     <>
       <div id="previewer" className='w-screen mx-0 mb-10' style={{ width: '100%' }} frameBorder={0}>
-        <StoryPreview scenes={markdown_to_json(story.description)} max_scene={markdown_to_json(story.description).length} user={user} storyUserId={story.userId} setEdit={setEdit} edit={edit} showIcons={true} />
+        <StoryPreview scenes={markdown_to_json(story.description)} max_scene={markdown_to_json(story.description).length} user={user} storyUserId={story.userId} setEdit={setEdit} edit={edit} showIcons={true} otherUserIds={story.otherUserIds} />
       </div>
       <Collapse in={edit}>
         <div className="contained align-text-center mt-10">

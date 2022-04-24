@@ -18,11 +18,12 @@ import axios from 'axios';
 import { injectStyle } from "react-toastify/dist/inject-style";
 import { motion } from "framer-motion"
 import { toast, ToastContainer } from 'react-toastify';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 
 
-function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, showIcons }) {
+function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, showIcons, otherUserIds }) {
     const router = useRouter();
     const converter = new showdown.Converter();
     const theme = useTheme();
@@ -30,7 +31,6 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
     const [nxtTransistion, setNxtTransistion] = React.useState();
     const [nxtTransistionAnimEnabled, setNxtTransistionAnimEnabled] = React.useState();
     const maxSteps = max_scene;
-
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
@@ -48,6 +48,9 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
         injectStyle();
     }, []);
 
+    const canEdit = () => {
+        return user && (user?._id === storyUserId || otherUserIds?.find(id => id === user?._id))
+    }
     return (
         <Box
             sx={{
@@ -65,34 +68,31 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
             }}
         >
             <AutoPlaySwipeableViews
-                // axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 animateTransitions={nxtTransistionAnimEnabled}
                 index={activeStep}
                 onChangeIndex={handleStepChange}
-                // enableMouseEvents={true}
                 interval={nxtTransistion}
-                allowFullScreen={true}
                 style={{ maxWidth: '100%', maxHeight: '100%', width: '100%', height: '100%' }}
             >
                 {scenes.map((scence, index) => {
                     const bg_link = scence.bg_link
                     return (
                         <motion.div id={"box_no" + (index + 1)} className="scence_box"
-                        initial="hidden"
-                        hidden={index !== activeStep}
-                        whileInView="visible"
-                        style={{
-                            backgroundImage: scence.bg_typ === "img" && `url(${bg_link ? bg_link : ''})`,
-                            backgroundRepeat: 'no-repeat',
-                            overflow: 'hidden',
-                            objectFit: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundSize: 'cover',
-                            maxHeight: '95%',
-                            maxWidth: '100%',
-                            flex: '1',
-                            margin: 0,
-                        }} key={index}>
+                            initial="hidden"
+                            hidden={index !== activeStep}
+                            whileInView="visible"
+                            style={{
+                                backgroundImage: scence.bg_typ === "img" && `url(${bg_link ? bg_link : ''})`,
+                                backgroundRepeat: 'no-repeat',
+                                overflow: 'hidden',
+                                objectFit: 'cover',
+                                backgroundPosition: 'center',
+                                backgroundSize: 'cover',
+                                maxHeight: '95%',
+                                maxWidth: '100%',
+                                flex: '1',
+                                margin: 0,
+                            }} key={index}>
                             {activeStep === index && (
                                 <>
                                     <motion.div animate={{
@@ -103,7 +103,7 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
                                             duration: 0.5,
                                             ease: "easeInOut"
                                         }
-                                    }} className={scence.class}  style={{ maxWidth: '100%', maxHeight: '100%', minHeight: '90%', minWidth: '100%', opacity: '0', transform: `translateX(${Math.floor(Math.random() * (200 - 100)) + 200}%)`}} dangerouslySetInnerHTML={{ __html: converter.makeHtml(scence.md_text) }} />
+                                    }} className={scence.class} style={{ maxWidth: '100%', maxHeight: '100%', minHeight: '90%', minWidth: '100%', opacity: '0', transform: `translateX(${Math.floor(Math.random() * (200 - 500)) + 200}%)` }} dangerouslySetInnerHTML={{ __html: converter.makeHtml(scence.md_text) }} />
                                 </>
                             )}
                             {scence.bg_typ === "ytv" && (
@@ -147,7 +147,7 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
 
             />
             {showIcons && <div className="flex mt-2">
-                {user?._id === storyUserId &&
+                {canEdit() &&
                     <>
                         <Tooltip title="Edit Story">
                             <IconButton onClick={() => {
@@ -156,22 +156,45 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
                                 <EditIcon />
                             </IconButton>
                         </Tooltip>
-                        <Tooltip title="Delete Story">
-                            <IconButton onClick={() => {
-                                const t = toast.loading('Deleting Story...');
-                                axios.delete(`https://csv-v3-api.vercel.app/api/story/${router.query.id}/${user._id}`, {
-                                    userId: user._id
-                                }).then(res => {
-                                    router.push('/')
-                                    toast.update(t, { render: "Deleted Story...", type: "success", isLoading: false, autoClose: 2000 });
-                                }).catch(err => {
-                                    console.log(err)
-                                    toast.update(t, { render: "Error in Deleting Story...", type: "error", isLoading: false, autoClose: 3000 });
-                                })
-                            }}>
-                                <DeleteForeverIcon />
-                            </IconButton>
-                        </Tooltip>
+                        {user?._id === storyUserId &&
+                            <>
+                                <Tooltip title="Delete Story">
+                                    <IconButton onClick={() => {
+                                        console.log(user?._id, storyUserId)
+                                        const t = toast.loading('Deleting Story...');
+                                        axios.delete(`https://csv-v3-api.vercel.app/api/story/${router.query.id}/${user._id}`).then(res => {
+                                            router.push('/')
+                                            toast.update(t, { render: "Deleted Story...", type: "success", isLoading: false, autoClose: 2000 });
+                                        }).catch(err => {
+                                            console.log(err)
+                                            toast.update(t, { render: "Error in Deleting Story...", type: "error", isLoading: false, autoClose: 3000 });
+                                        })
+                                    }}>
+                                        <DeleteForeverIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Add Team Member">
+                                    <IconButton onClick={async () => {
+                                        const memEmail = await prompt("Enter Email of Member to Add");
+                                        const t = toast.loading('Adding New Member...');
+                                        if (!memEmail) return toast.update(t, { render: "No Email Entered...", type: "error", isLoading: false, autoClose: 3000 });
+                                        const memId = await axios.get(`https://csv-v3-api.vercel.app/api/users/email/id/${memEmail}`).catch(err => { });
+                                        if (!memId?.data) return toast.update(t, { render: "User not found...", type: "error", isLoading: false, autoClose: 3000 });
+
+                                        axios.post(`https://csv-v3-api.vercel.app/api/story/${router.query.id}/team`, {
+                                            mainUserId: user._id,
+                                            otherUserId: memId.data._id
+                                        }).then(res => {
+                                            toast.update(t, { render: "Added Member...", type: "success", isLoading: false, autoClose: 2000 });
+                                        }).catch(err => {
+                                            console.log(err)
+                                            toast.update(t, { render: "Error in Adding Member...", type: "error", isLoading: false, autoClose: 3000 });
+                                        })
+                                    }}>
+                                        <AccountCircleIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </>}
                         <ToastContainer />
                     </>}
             </div>}

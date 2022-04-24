@@ -7,18 +7,17 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState(null);
+  const router = useRouter();
+
   useEffect(() => {
     if (localStorage.getItem('user') !== null) {
       const uid  = localStorage.getItem("user").toString();
       console.log(uid)
       axios.get(`https://csv-v3-api.vercel.app/api/users/${uid}`).then(res => {
         setUser(res.data);
-        console.log(user)
       });
     }
-    console.log(router.pathname)
   }, []);
-  const router = useRouter();
   return (
     <>
       <Head>
