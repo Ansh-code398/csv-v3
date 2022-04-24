@@ -73,6 +73,7 @@ const Index = ({ story, user, storyId }) => {
   }
   React.useEffect(() => {
     setEditor(story.description);
+    setBanner(story?.banner_url);
   }, []);
 
 
