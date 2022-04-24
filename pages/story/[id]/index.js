@@ -24,6 +24,7 @@ const Index = ({ story, user, storyId }) => {
   const [editor, setEditor] = useState("");
 
   const [n, setN] = useState(story.name);
+  const [banner, setBanner] = useState("");
 
   const name = useRef()
 
@@ -102,6 +103,13 @@ const Index = ({ story, user, storyId }) => {
               setN(e.target.value)
             }} />
           </div>
+          <div className="mt-5 mb-3">
+            <label htmlFor="banner" className="align-text-center form-label" required>Featured Image</label>
+            <input type="url" className="form-control" id="banner" placeholder="https://example.com/example.jpg" value={banner} onChange={(e) => {
+              setBanner(e.target.value)
+            }} />
+            <img src={banner} className="mx-auto mt-10" alt='Banner' />
+          </div>
           <div className="editor d-flex">
             <textarea placeholder="Enter markdown..." id="markdown_editor" value={editor} onChange={(e) => {
               setEditor(e.target.value);
@@ -118,12 +126,13 @@ const Index = ({ story, user, storyId }) => {
           </div>
           <div className='w-full flex justify-center items-center mx-0'>
             <Button varient="success" disabled={n.split(" ").join("") === ""} onClick={() => {
-               const t = toast.loading('Updating Story...');
+              const t = toast.loading('Updating Story...');
               axios.put(`https://csv-v3-api.vercel.app/api/story/${storyId}`, {
                 userId: user._id,
                 story: {
                   name: n,
                   description: editor,
+                  banner_url: banner,
                   userId: user._id,
                 }
               }).then(res => {
