@@ -12,11 +12,10 @@ import StoryPreview from '../components/StoryPreview';
 
 const NewPet = ({ user, setUser }) => {
   //Markdown to Json converter
-  const prv_btn = useRef();
-  const nxt_btn = useRef();
   const [editor, setEditor] = useState("---\n{{time:1000}}\n{{animate: true}}\n{{bg_typ:img}}\n{{bg_link:https://wallpaperaccess.com/full/3214373.jpg}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 1\n## Scenes\n---\n{{time:1000}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 2\n---\n{{time:1000}}\n{{bg_typ:ytv}}\n{{bg_link:https://www.youtube.com/embed/jV3xxOoWe-4}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 3\n\t\t\t");
 
   const [n, setN] = useState("Test");
+  const [banner, setBanner] = useState("");
 
   const name = useRef()
 
@@ -83,6 +82,13 @@ const NewPet = ({ user, setUser }) => {
             setN(e.target.value)
           }} />
         </div>
+        <div className="mt-5 mb-3">
+          <label htmlFor="banner" className="align-text-center form-label" required>Featured Image</label>
+          <input type="url" className="form-control" id="banner" placeholder="https://example.com/example.jpg" value={banner} onChange={(e) => {
+            setBanner(e.target.value)
+          }} />
+          <img src={banner} className="mx-auto mt-10" alt='Banner' />
+        </div>
         <div className="editor d-flex">
           <textarea placeholder="Enter markdown..." id="markdown_editor" value={editor} onChange={(e) => {
             setEditor(e.target.value);
@@ -111,6 +117,7 @@ const NewPet = ({ user, setUser }) => {
               story: {
                 name: n,
                 description: editor,
+                banner_url: banner,
                 userId: user._id
               }
             }).then(res => {

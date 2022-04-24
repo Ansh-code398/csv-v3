@@ -225,8 +225,9 @@ const Index = ({ stories, user, setUser }) => {
               <div className="videos">
                 {stories && stories.map((story, index) => (
                   <div className="video" key={index}>
+                  
                   <div className="video-time">{moment(story.createdAt).format('MMM DD, YYYY')}</div>
-                  <img src='https://static9.depositphotos.com/1559686/1203/i/600/depositphotos_12035522-stock-photo-open-book.jpg'/>
+                  <img src={story.story?.banner_url || 'https://static9.depositphotos.com/1559686/1203/i/600/depositphotos_12035522-stock-photo-open-book.jpg'} className="object-cover max-h-[212px]"/>
                   <div className="video-content">{story.story.name}</div>
                   <div className="view">
                     Visit <Link href={`/story/${story._id}`}>{story.story.name}</Link>

@@ -5,6 +5,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import StoryPreview from '../../../components/StoryPreview';
 import { injectStyle } from "react-toastify/dist/inject-style";
 import { toast, ToastContainer } from 'react-toastify';
+import Head from 'next/head';
 const Index = ({ story, user, storyId }) => {
   function removeItemAll(arr, value) {
     var i = 0;
@@ -76,6 +77,20 @@ const Index = ({ story, user, storyId }) => {
 
   return (
     <>
+      <Head>
+        <title>{story?.name || "CSV"}</title>
+        <meta name="description" content={story?.description || "CSV"} />
+        <meta name="og:title" content={story?.name || "CSV"} />
+        <meta name="og:description" content={story?.description || "CSV"} />
+        <meta name="og:image" content={story?.banner_url || "CSV"} />
+        <meta name="og:url" content={`https://www.csv-v3.vercel.app/story/${storyId}`} />
+        <meta name="twitter:title" content={story?.name || "CSV"} />
+        <meta name="twitter:description" content={story?.description || "CSV"} />
+        <meta name="twitter:image" content={story?.banner_url || "CSV"} />
+        <meta name="twitter:url" content={`https://www.csv-v3.vercel.app/story/${storyId}`} />
+        <link rel="canonical" href={`https://www.csv-v3.vercel.app/story/${storyId}`} />
+        <link rel="icon" type="image/png" href={story?.banner_url} />
+      </Head>
       <div id="previewer" className='w-screen mx-0 mb-10' style={{ width: '100%' }} frameBorder={0}>
         <StoryPreview scenes={markdown_to_json(story.description)} max_scene={markdown_to_json(story.description).length} user={user} storyUserId={story.userId} setEdit={setEdit} edit={edit} showIcons={true} otherUserIds={story.otherUserIds} />
       </div>
