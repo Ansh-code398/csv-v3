@@ -100,15 +100,15 @@ function StoryPreview({ scenes, max_scene, user, storyUserId, setEdit, edit, sho
                                         transform: 'translateX(0%)',
                                         transition: {
                                             delay: 1,
-                                            duration: 0.5,
+                                            duration: 0.2,
                                             ease: "easeInOut"
                                         }
                                     }} className={scence.class} style={{ maxWidth: '100%', maxHeight: '100%', minHeight: '90%', minWidth: '100%', opacity: '0', transform: `translateX(${Math.floor(Math.random() * (200 - 500)) + 200}%)` }} dangerouslySetInnerHTML={{ __html: converter.makeHtml(scence.md_text) }} />
                                 </>
                             )}
                             {scence.bg_typ === "ytv" && (
-                                <div className='absolute -z-10 w-full h-full top-0 max-h-[95%]'>
-                                    <iframe src={`https://youtube.com/embed/${bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}?&playlist=${bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}&autoplay=1&mute=1&color="white"&loop=1&rel=0&modestbranding=1&autohide=1&showinfo=0&controls=0`} frameBorder="0" allow="autoplay; loop;" width="100%" height="100%"></iframe>
+                            <div className='absolute -z-10 w-full h-full top-0 max-h-[95%] overflow-hidden'>
+                                    <iframe src={`https://youtube.com/embed/${bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}?&playlist=${bg_link?.split('youtube.com/embed/')[1] || 'dQw4w9WgXcQ'}&autoplay=1&mute=1&color="white"&loop=1&rel=0&modestbranding=1&autohide=1&showinfo=0&controls=0`} frameBorder="0" allow="autoplay; loop;"  className='h-full scale-150 overflow-hidden w-full object-cover'></iframe>
                                 </div>
                             )}
                         </motion.div>
