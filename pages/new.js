@@ -9,7 +9,14 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 import DownloadIcon from '@mui/icons-material/Download';
 import { IconButton } from '@mui/material';
 import StoryPreview from '../components/StoryPreview';
+import dynamic from "next/dynamic";
+import "@uiw/react-textarea-code-editor/dist.css";
+import { maxWidth } from '@mui/system';
 
+const CodeEditor = dynamic(
+  () => import("@uiw/react-textarea-code-editor").then((mod) => mod.default),
+  { ssr: false }
+);
 const NewPet = ({ user, setUser }) => {
   //Markdown to Json converter
   const [editor, setEditor] = useState("---\n{{time:1000}}\n{{animate: true}}\n{{bg_typ:img}}\n{{bg_link:https://wallpaperaccess.com/full/3214373.jpg}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 1\n## Scenes\n---\n{{time:1000}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 2\n---\n{{time:1000}}\n{{bg_typ:ytv}}\n{{bg_link:https://www.youtube.com/embed/jV3xxOoWe-4}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 3\n\t\t\t");
@@ -90,9 +97,32 @@ const NewPet = ({ user, setUser }) => {
           <img src={banner} className="mx-auto mt-10" alt='Banner' />
         </div>
         <div className="editor d-flex">
-          <textarea placeholder="Enter markdown..." id="markdown_editor" value={editor} onChange={(e) => {
+          {/* <textarea placeholder="Enter markdown..." id="markdown_editor" value={editor} onChange={(e) => {
             setEditor(e.target.value);
-          }} className="markdown_editor" oninput="render_md_to_stage();" defaultValue={"---\n{{time:1000}}\n{{animate: true}}\n{{bg_typ:img}}\n{{bg_link:https://wallpaperaccess.com/full/3214373.jpg}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 1\n## Scenes\n---\n{{time:1000}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 2\n---\n{{time:1000}}\n{{bg_typ:ytv}}\n{{bg_link:https://www.youtube.com/embed/jV3xxOoWe-4}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 3\n\t\t\t"} />
+          }} className="markdown_editor" defaultValue={"---\n{{time:1000}}\n{{animate: true}}\n{{bg_typ:img}}\n{{bg_link:https://wallpaperaccess.com/full/3214373.jpg}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 1\n## Scenes\n---\n{{time:1000}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 2\n---\n{{time:1000}}\n{{bg_typ:ytv}}\n{{bg_link:https://www.youtube.com/embed/jV3xxOoWe-4}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 3\n\t\t\t"} /> */}
+
+          <CodeEditor
+            language="html"
+            className="mx-2 mt-2 sm:max-w-[45%] max-w-full"
+            value={editor}
+            style={{
+              height: "100%",
+              width: "100%",
+              border: "none",
+              outline: "none",
+              resize: "none",
+              fontSize: "1.2rem",
+              fontFamily: "monospace",
+              padding: "0",
+              margin: "0",
+              maxHeight: "95vh",
+              minHeight: "95vh",
+              overflow: "auto",
+              borderRadius: "10px",
+              listStyle: "number",
+            }}
+            onChange={(evn) => setEditor(evn.target.value)}
+          />
           <div id="previewer" frameBorder={0}>
             <StoryPreview scenes={markdown_to_json(editor)} max_scene={markdown_to_json(editor).length} />
             {/* <div id="player_container" className="player_container">
