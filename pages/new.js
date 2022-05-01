@@ -97,11 +97,11 @@ const NewPet = ({ user, setUser }) => {
           <img src={banner} className="mx-auto mt-10" alt='Banner' />
         </div>
         <div className="editor d-flex">
-          {/* <textarea placeholder="Enter markdown..." id="markdown_editor" value={editor} onChange={(e) => {
+          <textarea placeholder="Enter markdown..." id="markdown_editor" value={editor} onChange={(e) => {
             setEditor(e.target.value);
-          }} className="markdown_editor" defaultValue={"---\n{{time:1000}}\n{{animate: true}}\n{{bg_typ:img}}\n{{bg_link:https://wallpaperaccess.com/full/3214373.jpg}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 1\n## Scenes\n---\n{{time:1000}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 2\n---\n{{time:1000}}\n{{bg_typ:ytv}}\n{{bg_link:https://www.youtube.com/embed/jV3xxOoWe-4}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 3\n\t\t\t"} /> */}
+          }} className="markdown_editor" defaultValue={"---\n{{time:1000}}\n{{animate: true}}\n{{bg_typ:img}}\n{{bg_link:https://wallpaperaccess.com/full/3214373.jpg}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 1\n## Scenes\n---\n{{time:1000}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 2\n---\n{{time:1000}}\n{{bg_typ:ytv}}\n{{bg_link:https://www.youtube.com/embed/jV3xxOoWe-4}}\n{{class:d-flex flex-column min-vh-100 justify-content-center align-items-center}}\n# Slide 3\n\t\t\t"} />
 
-          <CodeEditor
+          {/* <CodeEditor
             language="html"
             className="mx-2 mt-2 sm:max-w-[45%] max-w-full"
             value={editor}
@@ -122,7 +122,7 @@ const NewPet = ({ user, setUser }) => {
               listStyle: "number",
             }}
             onChange={(evn) => setEditor(evn.target.value)}
-          />
+          /> */}
           <div id="previewer" frameBorder={0}>
             <StoryPreview scenes={markdown_to_json(editor)} max_scene={markdown_to_json(editor).length} />
             {/* <div id="player_container" className="player_container">
