@@ -3,6 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&display=swap");
  :root {
 	 --body-font: "Manrope", sans-serif;
@@ -808,4 +809,301 @@ a  {
 
 li{
 	list-style: circle;
+}
+
+
+.quote1 {
+  display: inline-block;
+  margin: 1em;
+  overflow: hidden;
+}
+.quote1 blockquote {
+  background-color: #fff;
+  border: solid 2px #757575;
+  display: inline-block;
+  margin: 0;
+  padding: 1em;
+  position: relative;
+}
+.quote1 blockquote:before {
+  background-color: #fff;
+  bottom: -10%;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: -10%;
+  transform: rotate(-15deg) skew(5deg);
+}
+.quote1 blockquote cite {
+  display: block;
+  font-style: italic;
+  text-align: right;
+}
+.quote1 blockquote cite:before {
+  content: "- ";
+}
+.quote1 blockquote > * {
+  position: relative;
+  z-index: 1;
+}
+
+.quote2 {
+  display: inline-block;
+  margin: 1em;
+  max-width: 20em;
+  overflow: hidden;
+}
+.quote2 blockquote {
+  background-color: #fff;
+  border: solid 2px #757575;
+  display: inline-block;
+  margin: 0;
+  padding: 1em;
+  position: relative;
+}
+.quote2 blockquote:before {
+  animation: clockwise 30s infinite linear;
+  background-color: #fff;
+  bottom: 10%;
+  content: "";
+  left: 0;
+  opacity: 0.5;
+  position: absolute;
+  right: 0;
+  top: 10%;
+}
+.quote2 blockquote:after {
+  animation: counter 30s infinite linear;
+  background-color: #fff;
+  bottom: 10%;
+  content: "";
+  left: 0;
+  opacity: 0.5;
+  position: absolute;
+  right: 0;
+  top: 10%;
+}
+.quote2 blockquote cite {
+  display: block;
+  font-style: italic;
+  text-align: right;
+}
+.quote2 blockquote cite:before {
+  content: "- ";
+}
+.quote2 blockquote > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes clockwise {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes counter {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+.animated-shadow-quote {
+  display: inline-block;
+  margin: 1em;
+  max-width: 20em;
+  position: relative;
+}
+.animated-shadow-quote blockquote {
+  animation: shadows 2s linear infinite alternate;
+  display: inline-block;
+  margin: 0;
+  padding: 1em;
+}
+.animated-shadow-quote blockquote cite {
+  display: block;
+  font-style: italic;
+  text-align: right;
+}
+.animated-shadow-quote blockquote cite:before {
+  content: "- ";
+}
+
+@keyframes shadows {
+  0% {
+    box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.25);
+    transform: scale(0.95);
+  }
+  100% {
+    box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.25);
+    transform: scale(1);
+  }
+}
+.quote3 {
+  display: inline-block;
+  font-family: sans-serif;
+  margin: 1em;
+  max-width: 20em;
+}
+.quote3 blockquote {
+  border: solid 1em #ccc;
+  display: inline-block;
+  margin: 0;
+  padding: 1em;
+  position: relative;
+}
+.quote3 blockquote:before {
+  background-color: #fff;
+  bottom: -1em;
+  content: "";
+  left: 2em;
+  position: absolute;
+  right: 2em;
+  top: -1em;
+}
+.quote3 blockquote cite {
+  color: #757575;
+  display: block;
+  font-size: small;
+  font-style: normal;
+  text-align: right;
+  text-transform: uppercase;
+}
+.quote3 blockquote > * {
+  position: relative;
+  z-index: 1;
+}
+
+.quote4 {
+  display: inline-block;
+  font-family: sans-serif;
+  margin: 1em;
+  max-width: 20em;
+}
+.quote4 blockquote {
+  display: inline-block;
+  margin: 0;
+  padding: 1em;
+  position: relative;
+}
+.quote4 blockquote:before {
+  color: #f90;
+  content: "“";
+  font-size: 4em;
+  left: 0;
+  line-height: 0.75em;
+  position: absolute;
+  top: 0;
+  transform: scale(2, 8);
+  transform-origin: top;
+}
+.quote4 blockquote:after {
+  color: #f90;
+  content: "”";
+  font-size: 4em;
+  line-height: 0.75em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: scale(2, 8);
+  transform-origin: top;
+}
+.quote4 blockquote > * {
+  padding: 0 2em;
+}
+.quote4 blockquote cite {
+  color: #c60;
+  display: block;
+  font-style: normal;
+  text-align: right;
+  text-transform: uppercase;
+}
+.quote5 {
+  display: inline-block;
+  margin: 1em;
+  max-width: 20em;
+  position: relative;
+}
+.quote5 blockquote {
+  animation: shadows 2s linear infinite alternate;
+  display: inline-block;
+  margin: 0;
+  padding: 1em;
+}
+.quote5 blockquote cite {
+  display: block;
+  font-style: italic;
+  text-align: right;
+}
+.quote5 blockquote cite:before {
+  content: "- ";
+}
+
+@keyframes shadows {
+  0% {
+    box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.25);
+    transform: scale(0.95);
+  }
+  100% {
+    box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.25);
+    transform: scale(1);
+  }
+}
+
+/* Blockquote CSS */
+.quote6 {
+  max-width: 960px;
+  padding: 0 6em 3em;
+}
+
+.quote6 blockquote {
+  border-left: 3px solid #00CC8F;
+  color: #1a1a1a;
+  font-family: Georgia, Times, "Times New Roman", serif;
+  font-size: 1.5em;
+  font-style: italic;
+  line-height: 1.8em;
+  margin: 1.1em -4em;
+  padding: 1em 2em;
+  position: relative;
+  transition: .2s border ease-in-out;
+  z-index: 0;
+}
+
+.quote6 blockquote:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -4px;
+  height: 2em;
+  background-color: #fff;
+  width: 5px;
+  margin-top: -1em;
+}
+
+.quote6 blockquote:after {
+  content: "''";
+  position: absolute;
+  top: 52%;
+  left: -0.5em;
+  color: #00CC8F;
+  font-family: Georgia;
+  font-style: normal;
+  line-height: 1em;
+  text-align: center;
+  text-indent: -2px;
+  width: 1em;
+  margin-top: -0.5em;
+}
+
+.quote6 blockquote cite {
+  display: block;
+  font-size: 0.75em;
+  line-height: 1.8em;
+  margin-top: 1em;
 }
