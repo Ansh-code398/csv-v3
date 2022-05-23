@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps }) {
       console.log(uid)
       axios.get(`https://csv-v3-api.vercel.app/api/users/${uid}`).then(res => {
         setUser(res.data);
-      });
+      }).catch(e => {})
     }
   }, []);
   return (

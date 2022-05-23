@@ -6,7 +6,7 @@ import StoryPreview from '../../../components/StoryPreview';
 import { injectStyle } from "react-toastify/dist/inject-style";
 import { toast, ToastContainer } from 'react-toastify';
 import Head from 'next/head';
-const Index = ({ story, user, storyId }) => {
+const Index = ({ story, user, storyId, postAuthor }) => {
   function removeItemAll(arr, value) {
     var i = 0;
     while (i < arr.length) {
@@ -81,13 +81,14 @@ const Index = ({ story, user, storyId }) => {
     <>
       <Head>
         <title>{story?.name || "CSV"}</title>
-        <meta name="description" content={story?.name || "CSV"} />
+        <meta name="description" content={postAuthor?.username || "CSV"} />
         <meta name="og:title" content={story?.name || "CSV"} />
         <meta name="og:description" content={story?.name || "CSV"} />
+        <meta name="og:description" content={postAuthor?.username || "CSV"} />
         <meta name="og:image" content={story?.banner_url || "CSV"} />
         <meta name="og:url" content={`https://www.csv-v3.vercel.app/story/${storyId}`} />
         <meta name="twitter:title" content={story?.name || "CSV"} />
-        <meta name="twitter:description" content={story?.description || "CSV"} />
+        <meta name="twitter:description" content={postAuthor?.username || "CSV"} />
         <meta name="twitter:image" content={story?.banner_url || "CSV"} />
         <meta name="twitter:url" content={`https://www.csv-v3.vercel.app/story/${storyId}`} />
         <link rel="canonical" href={`https://www.csv-v3.vercel.app/story/${storyId}`} />
@@ -157,6 +158,10 @@ export default Index;
 
 export async function getServerSideProps(ctx) {
   const data = await (await axios.get(`https://csv-v3-api.vercel.app/api/story/${ctx.query.id}`).catch(e => { }))?.data;
+
+  const user = await (await axios.get(`https://csv-v3-api.vercel.app/api/users/${data?.story?.userId}`).catch(e => { }))?.data;
+
+
   if (!data) {
     return {
       props: {
@@ -171,6 +176,7 @@ export async function getServerSideProps(ctx) {
     props: {
       storyId: ctx.query.id,
       story: data.story,
+      postAuthor: user,
     },
   }
 }
